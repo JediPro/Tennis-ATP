@@ -12,7 +12,7 @@ dates = dtemp$Date
 dates = as.Date(dates, format = '%d-%m-%y')
 dtemp$Date = dates
 rm(dates)
-ds = dfinal
+#ds = dfinal
 
 # Sort by dates
 setkey(dtemp, Date, ATP)
@@ -34,7 +34,7 @@ rocc = function(actual.values,pred.model){
 
 # Pre-process ####
 data_stats = data_raw %>% select_if(function(col) is.integer(col) || is.character(col))
-data_stats$Date = data_odds$Date
+data_stats$Date = data_raw$Date
 odds_preds = (setdiff(colnames(data_raw), colnames(data_stats)))
 data_odds = data_raw %>% select(one_of(odds_preds))
 rm(odds_preds)
@@ -44,10 +44,6 @@ data_odds$Index = seq(from=1, to=nrow(data_odds), by=1)
 
 # recode variables ####
 # Series
-data_stats$Series = data_stats$Series %>% recode('International' = 'ATP250', 'International Gold' = 'ATP500',
-                                                 'Masters Cup' = 'ATPFinals', 
-                                                 'International Series' = 'ATP250',
-                                                 'Masters')
 data_stats$Series = recode(data_stats$Series, "c('International', 'International Series')='ATP250';
                            'International Gold'='ATP500';
                            c('Masters','Masters 1000')='Masters1000';
